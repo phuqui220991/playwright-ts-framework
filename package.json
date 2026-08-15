@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:pb": "cross-env ENV=pb npx playwright test",
+    "test:play": "cross-env ENV=play npx playwright test",
+    "test:prod": "cross-env ENV=prod npx playwright test"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/phuqui220991/playwright-ts-framework.git"
