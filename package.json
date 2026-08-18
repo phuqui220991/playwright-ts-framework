@@ -6,7 +6,8 @@
   "scripts": {
     "test:pb": "cross-env ENV=pb npx playwright test",
     "test:play": "cross-env ENV=play npx playwright test",
-    "test:prod": "cross-env ENV=prod npx playwright test"
+    "test:prod": "cross-env ENV=prod npx playwright test",
+    "test:example": "cross-env ENV=example npx playwright test"
   },
   "repository": {
     "type": "git",
