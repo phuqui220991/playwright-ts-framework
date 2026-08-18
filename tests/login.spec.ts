@@ -5,7 +5,7 @@ test.describe('Authentication', () => {
 
   test('TC-Login-001: Login successfully with valid credentials', async ({ loginPage, dashboardPage }) => {
     await loginPage.open();
-    await loginPage.login(env.username ?? 'orangehrm', env.password ?? 'Admin@0123');
+    await loginPage.login(env.username, env.password);
     await dashboardPage.expectLoaded();
   });
 
