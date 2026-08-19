@@ -28,4 +28,9 @@ export class LoginPage extends BasePage {
     async expectInvalidCredentialsError() {
         await expect(this.errorAlert).toHaveText("Invalid credentials")
     }
+
+    async expectLoaded() {
+        await expect(this.page).toHaveURL(/\/auth\/login/);
+        await expect(this.loginButton).toBeVisible();
+    }
 }
