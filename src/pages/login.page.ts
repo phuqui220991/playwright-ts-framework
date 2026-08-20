@@ -1,5 +1,6 @@
 import { expect, Locator, Page } from "@playwright/test";
 import { BasePage } from "./base.page";
+import { Routes } from "../constants/routes";
 
 export class LoginPage extends BasePage {
     readonly usernameInput: Locator;
@@ -16,7 +17,7 @@ export class LoginPage extends BasePage {
     }
 
     async open() {
-        await this.goto('/web/index.php/auth/login');
+        await this.goto(Routes.login);
     }
  
     async login(username: string, password: string) {
