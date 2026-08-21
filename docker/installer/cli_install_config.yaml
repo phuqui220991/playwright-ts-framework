@@ -1,0 +1,34 @@
+# Unattended install config for OrangeHRM's CLI installer
+# (installer/cli_install.php), used to provision the "db" service defined in
+# docker-compose.yml on first boot. These are throwaway local/CI credentials
+# for a disposable dev container — not production secrets. Keep the admin
+# credentials and employee name in sync with:
+#   - .github/workflows/playwright.yml (TEST_USERNAME / TEST_PASSWORD)
+#   - src/data/builders/userBuilder.ts (buildForUi's hardcoded employee name)
+database:
+  hostName: db
+  hostPort: 3306
+  databaseName: orangehrm
+  privilegedDatabaseUser: root
+  privilegedDatabasePassword: root
+  useSameDbUserForOrangeHRM: n
+  orangehrmDatabaseUser: orangehrm
+  orangehrmDatabasePassword: orangehrm
+  isExistingDatabase: y
+  enableDataEncryption: n
+
+organization:
+  name: OrangeHRM
+  country: US
+
+admin:
+  adminUserName: orangehrm
+  adminPassword: Admin@0123
+  adminEmployeeFirstName: Qui
+  adminEmployeeLastName: Ngo
+  workEmail: admin@example.com
+  contactNumber: ~
+  registrationConsent: true
+
+license:
+  agree: y

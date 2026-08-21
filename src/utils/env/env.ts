@@ -7,11 +7,11 @@ import fs from 'fs';
 const environment = process.env.ENV || 'example';
 const envFile = path.resolve(process.cwd(), `.env.${environment}`);
 
-if (!fs.existsSync(envFile)) {
+if (fs.existsSync(envFile)) {
+  dotenv.config({ path: envFile });
+} else if (!process.env.CI) {
   throw new Error(`Environment file not found: ${envFile}`);
 }
-
-dotenv.config({ path: envFile });
 
 validateEnv();
 
