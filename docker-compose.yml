@@ -4,29 +4,29 @@ version: '3.8'
 # No container_name is set so this can run alongside any other OrangeHRM
 # stack you might already have running locally under a different project name.
 services:
-  orangehrm:
-    image: orangehrm/orangehrm:latest
-    restart: unless-stopped
-    depends_on:
-      - db
-    ports:
-      - "8080:80"
-    environment:
-      - ORANGEHRM_DATABASE_HOST=db
-      - ORANGEHRM_DATABASE_USER=orangehrm
-      - ORANGEHRM_DATABASE_PASSWORD=orangehrm
-      - ORANGEHRM_DATABASE_NAME=orangehrm
+    orangehrm:
+        image: orangehrm/orangehrm:latest
+        restart: unless-stopped
+        depends_on:
+            - db
+        ports:
+            - '8080:80'
+        environment:
+            - ORANGEHRM_DATABASE_HOST=db
+            - ORANGEHRM_DATABASE_USER=orangehrm
+            - ORANGEHRM_DATABASE_PASSWORD=orangehrm
+            - ORANGEHRM_DATABASE_NAME=orangehrm
 
-  db:
-    image: mariadb:10.6
-    restart: unless-stopped
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=orangehrm
-      - MYSQL_PASSWORD=orangehrm
-      - MYSQL_DATABASE=orangehrm
-    volumes:
-      - orangehrm_db_data:/var/lib/mysql
+    db:
+        image: mariadb:10.6
+        restart: unless-stopped
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=orangehrm
+            - MYSQL_PASSWORD=orangehrm
+            - MYSQL_DATABASE=orangehrm
+        volumes:
+            - orangehrm_db_data:/var/lib/mysql
 
 volumes:
-  orangehrm_db_data:
+    orangehrm_db_data:

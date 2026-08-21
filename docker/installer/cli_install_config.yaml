@@ -6,29 +6,29 @@
 #   - .github/workflows/playwright.yml (TEST_USERNAME / TEST_PASSWORD)
 #   - src/data/builders/userBuilder.ts (buildForUi's hardcoded employee name)
 database:
-  hostName: db
-  hostPort: 3306
-  databaseName: orangehrm
-  privilegedDatabaseUser: root
-  privilegedDatabasePassword: root
-  useSameDbUserForOrangeHRM: n
-  orangehrmDatabaseUser: orangehrm
-  orangehrmDatabasePassword: orangehrm
-  isExistingDatabase: y
-  enableDataEncryption: n
+    hostName: db
+    hostPort: 3306
+    databaseName: orangehrm
+    privilegedDatabaseUser: root
+    privilegedDatabasePassword: root
+    useSameDbUserForOrangeHRM: n
+    orangehrmDatabaseUser: orangehrm
+    orangehrmDatabasePassword: orangehrm
+    isExistingDatabase: y
+    enableDataEncryption: n
 
 organization:
-  name: OrangeHRM
-  country: US
+    name: OrangeHRM
+    country: US
 
 admin:
-  adminUserName: orangehrm
-  adminPassword: Admin@0123
-  adminEmployeeFirstName: Qui
-  adminEmployeeLastName: Ngo
-  workEmail: admin@example.com
-  contactNumber: ~
-  registrationConsent: true
+    adminUserName: orangehrm
+    adminPassword: Admin@0123
+    adminEmployeeFirstName: Qui
+    adminEmployeeLastName: Ngo
+    workEmail: admin@example.com
+    contactNumber: ~
+    registrationConsent: true
 
 license:
-  agree: y
+    agree: y

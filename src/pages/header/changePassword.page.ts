@@ -1,8 +1,7 @@
-import { expect, Page } from "@playwright/test";
-import { BasePage } from "../base.page";
+import { expect, Page } from '@playwright/test';
+import { BasePage } from '../base.page';
 
 export class ChangePasswordPage extends BasePage {
-
     constructor(page: Page) {
         super(page);
     }
