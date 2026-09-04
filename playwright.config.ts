@@ -26,11 +26,11 @@ export default defineConfig({
         baseURL: env.baseUrl,
 
         /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
+        headless: true,
         trace: 'on-first-retry',
-
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',
-        headless: true,
+
         viewport: { width: 1280, height: 900 },
         actionTimeout: 10000,
         navigationTimeout: 15000,
