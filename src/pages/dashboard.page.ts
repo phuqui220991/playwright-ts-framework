@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test';
 import { BasePage } from './base.page';
-import { HeaderComponent } from '../components/header.component';
-import { Routes } from '../constants/routes';
+import { HeaderComponent } from '@components/header.component';
+import { Routes } from '@constants/routes';
 
 export class DashboardPage extends BasePage {
     readonly header: HeaderComponent;
@@ -11,11 +11,11 @@ export class DashboardPage extends BasePage {
         this.header = new HeaderComponent(page);
     }
 
-    async open() {
+    async open(): Promise<void> {
         await this.goto(Routes.dashboard);
     }
 
-    async expectLoaded() {
+    async expectLoaded(): Promise<void> {
         await expect(this.page).toHaveURL(/\/dashboard\/index/);
     }
 }

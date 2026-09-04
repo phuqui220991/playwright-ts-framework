@@ -1,17 +1,15 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export class HeaderComponent {
-    readonly page: Page;
-    readonly headerUsermenu: Locator;
-    readonly aboutLink: Locator;
-    readonly supportLink: Locator;
-    readonly changePasswordLink: Locator;
-    readonly logoutLink: Locator;
-    readonly aboutModal: Locator;
-    readonly aboutModalCloseButton: Locator;
+    private readonly headerUsermenu: Locator;
+    private readonly aboutLink: Locator;
+    private readonly supportLink: Locator;
+    private readonly changePasswordLink: Locator;
+    private readonly logoutLink: Locator;
+    private readonly aboutModal: Locator;
+    private readonly aboutModalCloseButton: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
+    constructor(private readonly page: Page) {
         this.headerUsermenu = page.locator('.oxd-userdropdown-tab');
         this.aboutLink = page.getByRole('menuitem', { name: 'About' });
         this.supportLink = page.getByRole('menuitem', { name: 'Support' });
@@ -21,31 +19,31 @@ export class HeaderComponent {
         this.aboutModalCloseButton = this.aboutModal.locator('.oxd-dialog-close-button');
     }
 
-    async openAbout() {
+    async openAbout(): Promise<void> {
         await this.headerUsermenu.click();
         await this.aboutLink.click();
     }
 
-    async expectAboutVisible() {
+    async expectAboutVisible(): Promise<void> {
         await expect(this.aboutModal).toBeVisible();
         await expect(this.aboutModal).toContainText('About');
     }
 
-    async closeAbout() {
+    async closeAbout(): Promise<void> {
         await this.aboutModalCloseButton.click();
     }
 
-    async goToSupport() {
+    async goToSupport(): Promise<void> {
         await this.headerUsermenu.click();
         await this.supportLink.click();
     }
 
-    async goToChangePassword() {
+    async goToChangePassword(): Promise<void> {
         await this.headerUsermenu.click();
         await this.changePasswordLink.click();
     }
 
-    async logout() {
+    async logout(): Promise<void> {
         await this.headerUsermenu.click();
         await this.logoutLink.click();
     }
