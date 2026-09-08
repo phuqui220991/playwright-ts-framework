@@ -21,4 +21,5 @@ export const env: EnvConfig = {
     password: process.env.TEST_PASSWORD!,
     apiBaseUrl: process.env.API_BASE_URL || '',
     environmentName: environment,
+    debug: process.env.DEBUG === 'true' || false,
 };

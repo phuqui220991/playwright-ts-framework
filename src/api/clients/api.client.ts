@@ -1,133 +1,66 @@
-import type { APIRequestContext, APIResponse } from '@playwright/test';
-import { test } from '@playwright/test';
-import type { ZodType } from 'zod';
+import { APIRequestContext, APIResponse, expect } from '@playwright/test';
+import { Logger } from '@utils/log/logger';
 
-type RequestOptions<M extends 'get' | 'post' | 'put' | 'patch' | 'delete'> = Parameters<
-    APIRequestContext[M]
->[1];
-
-export type ApiResult<T = unknown> = {
-    status: number;
-    ok: boolean;
-    headers: Record<string, string>;
-    body: T;
-    raw: APIResponse;
-};
+type GetOptions = Parameters<APIRequestContext['get']>[1];
+type PostOptions = Parameters<APIRequestContext['post']>[1];
+type PutOptions = Parameters<APIRequestContext['put']>[1];
+type DeleteOptions = Parameters<APIRequestContext['delete']>[1];
 
 export class ApiClient {
-    constructor(
-        protected readonly request: APIRequestContext,
-        protected readonly defaults: { baseUrl?: string; token?: string } = {},
-    ) {}
+    constructor(private readonly request: APIRequestContext) {}
 
-    get<T>(endpoint: string, options?: RequestOptions<'get'>) {
-        return this.send<T>('get', endpoint, options);
+    async get(path: string, options?: GetOptions): Promise<APIResponse> {
+        Logger.info(`API GET: ${path}`);
+        const response = await this.request.get(path, options);
+        Logger.info(`API GET ${path} -> ${response.status()}`);
+        return response;
     }
 
-    post<T, TBody = unknown>(endpoint: string, data?: TBody, options?: RequestOptions<'post'>) {
-        return this.send<T>('post', endpoint, { ...options, data });
+    async post(path: string, options?: PostOptions): Promise<APIResponse> {
+        Logger.info(`API POST: ${path}`);
+        const response = await this.request.post(path, options);
+        Logger.info(`API POST ${path} -> ${response.status()}`);
+        return response;
     }
 
-    put<T, TBody = unknown>(endpoint: string, data?: TBody, options?: RequestOptions<'put'>) {
-        return this.send<T>('put', endpoint, { ...options, data });
+    async put(path: string, options?: PutOptions): Promise<APIResponse> {
+        Logger.info(`API PUT: ${path}`);
+        const response = await this.request.put(path, options);
+        Logger.info(`API PUT ${path} -> ${response.status()}`);
+        return response;
     }
 
-    patch<T, TBody = unknown>(endpoint: string, data?: TBody, options?: RequestOptions<'patch'>) {
-        return this.send<T>('patch', endpoint, { ...options, data });
+    async delete(path: string, options?: DeleteOptions): Promise<APIResponse> {
+        Logger.info(`API DELETE: ${path}`);
+        const response = await this.request.delete(path, options);
+        Logger.info(`API DELETE ${path} -> ${response.status()}`);
+        return response;
     }
 
-    delete<T>(endpoint: string, data?: unknown, options?: RequestOptions<'delete'>) {
-        return this.send<T>('delete', endpoint, { ...options, data });
+    async expectStatus(response: APIResponse, expectedStatus: number): Promise<void> {
+        const responseText = await response.text().catch(() => '');
+
+        expect(
+            response.status(),
+            `Expected status ${expectedStatus}, but received ${response.status()}.
+URL: ${response.url()}
+Body: ${responseText.slice(0, 1000)}`,
+        ).toBe(expectedStatus);
     }
 
-    /**
-     * Same as the verb methods, but throws a rich error on non-2xx.
-     * Use this in fixtures / arrange steps where a failure is not the thing under test.
-     */
-    async ensureOk<T>(result: Promise<ApiResult<T>>): Promise<T> {
-        const res = await result;
-        if (res.ok) return res.body;
+    async expectOk(response: APIResponse): Promise<void> {
+        const responseText = await response.text().catch(() => '');
 
-        throw new Error(
-            [
-                'API request failed.',
-                `Status: ${res.status} ${res.raw.statusText()}`,
-                `URL: ${res.raw.url()}`,
-                `Body: ${typeof res.body === 'string' ? res.body : JSON.stringify(res.body, null, 2)}`,
-            ].join('\n'),
-        );
+        expect(
+            response.ok(),
+            `Expected response to be OK.
+Status: ${response.status()}
+URL: ${response.url()}
+Body: ${responseText.slice(0, 1000)}`,
+        ).toBeTruthy();
     }
 
-    /** Runtime contract check. Fails loudly with the exact path that drifted. */
-    parse<T>(schema: ZodType<T>, result: ApiResult<unknown>): T {
-        const parsed = schema.safeParse(result.body);
-        if (!parsed.success) {
-            throw new Error(
-                [
-                    `Response schema mismatch for ${result.raw.url()}`,
-                    `Status: ${result.status}`,
-                    parsed.error.issues
-                        .map((i) => `  - ${i.path.join('.') || '<root>'}: ${i.message}`)
-                        .join('\n'),
-                ].join('\n'),
-            );
-        }
-        return parsed.data;
-    }
-
-    protected async send<T>(
-        method: 'get' | 'post' | 'put' | 'patch' | 'delete',
-        endpoint: string,
-        options: Record<string, unknown> = {},
-    ): Promise<ApiResult<T>> {
-        const url = this.resolveUrl(endpoint);
-
-        return test.step(`${method.toUpperCase()} ${url}`, async () => {
-            const response = await this.request[method](url, {
-                ...options,
-                headers: { ...this.authHeader(), ...(options.headers as object) },
-                // never let Playwright throw for us; the caller decides
-                failOnStatusCode: false,
-            } as never);
-
-            return {
-                status: response.status(),
-                ok: response.ok(),
-                headers: response.headers(),
-                body: (await this.parseBody(response)) as T,
-                raw: response,
-            };
-        });
-    }
-
-    private authHeader(): Record<string, string> {
-        return this.defaults.token ? { Authorization: `Bearer ${this.defaults.token}` } : {};
-    }
-
-    private resolveUrl(endpoint: string): string {
-        const base = this.defaults.baseUrl;
-        if (!base || /^https?:\/\//i.test(endpoint)) return endpoint;
-        return `${base.replace(/\/+$/, '')}/${endpoint.replace(/^\/+/, '')}`;
-    }
-
-    /** Content-type aware, and safe on 204 / empty bodies. */
-    private async parseBody(response: APIResponse): Promise<unknown> {
-        if (response.status() === 204) return null;
-
-        const contentType = response.headers()['content-type'] ?? '';
-        const text = await response.text();
-        if (text.length === 0) return null;
-
-        if (contentType.includes('json')) {
-            try {
-                return JSON.parse(text);
-            } catch {
-                // Malformed JSON is a real failure — surface the payload, don't null it out.
-                throw new Error(
-                    `Expected JSON from ${response.url()} but parsing failed.\nRaw body: ${text.slice(0, 1000)}`,
-                );
-            }
-        }
-        return text;
+    async json<T>(response: APIResponse): Promise<T> {
+        return (await response.json()) as T;
     }
 }

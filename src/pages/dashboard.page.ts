@@ -5,10 +5,13 @@ import { Routes } from '@constants/routes';
 
 export class DashboardPage extends BasePage {
     readonly header: HeaderComponent;
+    private readonly dashboardTitle;
 
     constructor(page: Page) {
         super(page);
         this.header = new HeaderComponent(page);
+
+        this.dashboardTitle = page.locator('h6', { hasText: 'Dashboard' });
     }
 
     async open(): Promise<void> {
@@ -17,5 +20,6 @@ export class DashboardPage extends BasePage {
 
     async expectLoaded(): Promise<void> {
         await expect(this.page).toHaveURL(/\/dashboard\/index/);
+        await expect(this.dashboardTitle).toBeVisible();
     }
 }

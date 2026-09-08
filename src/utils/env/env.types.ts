@@ -4,4 +4,5 @@ export interface EnvConfig {
     username: string;
     password: string;
     environmentName: string;
+    debug: boolean;
 }
