@@ -4,6 +4,7 @@ import { DashboardPage } from '@pages/dashboard.page';
 import { ChangePasswordPage } from '@pages/header/changePassword.page';
 import { SupportPage } from '@pages/header/support.page';
 import { UserManagementPage } from '@pages/admin/userManagement.page';
+import { SideNavComponent } from '@components/side-nav.component';
 
 type Pages = {
     loginPage: LoginPage;
@@ -13,6 +14,9 @@ type Pages = {
 
     // Admin pages
     userManagementPage: UserManagementPage;
+
+    // Add more pages here as needed
+    sideNavComponent: SideNavComponent;
 };
 
 export const test = base.extend<Pages>({
@@ -34,6 +38,10 @@ export const test = base.extend<Pages>({
 
     userManagementPage: async ({ page }, use) => {
         await use(new UserManagementPage(page));
+    },
+
+    sideNavComponent: async ({ page }, use) => {
+        await use(new SideNavComponent(page));
     },
 });
 
