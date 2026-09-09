@@ -39,6 +39,7 @@ module.exports = [
         },
         rules: {
             ...playwright.configs['flat/recommended'].rules,
+            'playwright/expect-expect': ['warn', { assertFunctionPatterns: ['^expect'] }],
         },
     },
     prettierConfig,

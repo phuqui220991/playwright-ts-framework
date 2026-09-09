@@ -18,3 +18,36 @@ export interface APIUserData extends UserCredentials {
     userRoleId: number;
     status: boolean;
 }
+
+export interface AdminUserRecord {
+    id: number;
+    userName: string;
+    deleted: boolean;
+    status: boolean;
+    employee: {
+        empNumber: number;
+        employeeId: string;
+        firstName: string;
+        middleName: string;
+        lastName: string;
+        terminationId: number | null;
+    };
+    userRole: {
+        id: number;
+        name: string;
+        displayName: string;
+    };
+}
+
+export interface AdminUserListResponse {
+    data: AdminUserRecord[];
+    meta: { total: number };
+}
+
+export interface AdminUserResponse {
+    data: AdminUserRecord;
+}
+
+export interface AdminUserDeleteResponse {
+    data: number[];
+}

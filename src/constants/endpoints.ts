@@ -1,7 +1,5 @@
 export const Endpoints = {
     users: {
-        base: '/users',
-        byId: (id: string) => `/users/${id}`,
-        me: '/users/me',
+        base: '/web/index.php/api/v2/admin/users',
     },
 } as const;

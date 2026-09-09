@@ -44,19 +44,29 @@ export default defineConfig({
         },
         {
             name: 'chromium',
+            testDir: './tests/ui',
             use: { ...devices['Desktop Chrome'], storageState: 'auth/storageState/auth.json' },
             dependencies: ['setup'],
         },
 
         {
             name: 'firefox',
+            testDir: './tests/ui',
             use: { ...devices['Desktop Firefox'], storageState: 'auth/storageState/auth.json' },
             dependencies: ['setup'],
         },
 
         {
             name: 'webkit',
+            testDir: './tests/ui',
             use: { ...devices['Desktop Safari'], storageState: 'auth/storageState/auth.json' },
+            dependencies: ['setup'],
+        },
+
+        {
+            name: 'api',
+            testDir: './tests/api',
+            use: { storageState: 'auth/storageState/auth.json' },
             dependencies: ['setup'],
         },
 

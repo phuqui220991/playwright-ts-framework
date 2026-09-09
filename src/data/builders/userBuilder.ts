@@ -22,7 +22,9 @@ export class UserBuilder {
         this.name = faker.person.fullName();
         this.role = 'Admin';
         this.enabled = true;
-        this.empNumber = faker.number.int({ min: 1000, max: 9999 });
+        // Must match the employee seeded by docker/installer/cli_install_config.yaml — the API rejects
+        // any empNumber that isn't an existing employee.
+        this.empNumber = 1;
     }
 
     withUsername(username: string): this {
