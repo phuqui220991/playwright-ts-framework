@@ -9,7 +9,8 @@
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
-        "prepare": "husky"
+        "prepare": "husky",
+        "typecheck": "tsc --noEmit"
     },
     "repository": {
         "type": "git",
@@ -36,12 +37,14 @@
         "husky": "^9.1.7",
         "lint-staged": "^17.3.0",
         "prettier": "^3.9.6",
+        "typescript": "^5.9.3",
         "zod": "^4.5.4"
     },
     "lint-staged": {
         "*.ts": [
             "eslint --fix",
-            "prettier --write"
+            "prettier --write",
+            "bash -c 'tsc --noEmit'"
         ],
         "*.{json,md,yml,yaml}": [
             "prettier --write"
