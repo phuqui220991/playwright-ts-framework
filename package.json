@@ -2,9 +2,16 @@
     "name": "playwright-ts-framework",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "engines": {
+        "node": ">=22"
+    },
     "scripts": {
+        "test": "npx playwright test",
         "test:example": "cross-env ENV=example npx playwright test",
+        "test:headed": "npx playwright test --headed",
+        "test:debug": "npx playwright test --debug",
+        "test:ui-mode": "npx playwright test --ui",
+        "report": "npx playwright show-report",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
