@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { UIUserFormData } from '../../models/user';
+import { UIUserFormData } from '@models/user';
 import { BasePage } from '@pages/base.page';
-import { Routes } from '../../constants/routes';
+import { Routes } from '@constants/routes';
 
 export class UserManagementPage extends BasePage {
     readonly usernameInput: Locator;
@@ -36,7 +36,7 @@ export class UserManagementPage extends BasePage {
         this.successMessage = page.locator('.oxd-toast-content');
     }
 
-    async open(action: string): Promise<void> {
+    async open(action: 'add' | 'view'): Promise<void> {
         if (action === 'add') {
             await this.goto(Routes.addSystemUser);
         } else {

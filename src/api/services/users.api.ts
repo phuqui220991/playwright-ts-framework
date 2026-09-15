@@ -6,7 +6,7 @@ import {
     AdminUserRecord,
     AdminUserResponse,
     APIUserData,
-} from '../../models/user';
+} from '@models/user';
 
 const SEARCH_DEFAULTS = { limit: 50, offset: 0, sortField: 'u.userName', sortOrder: 'ASC' };
 

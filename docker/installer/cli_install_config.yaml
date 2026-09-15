@@ -4,7 +4,7 @@
 # for a disposable dev container — not production secrets. Keep the admin
 # credentials and employee name in sync with:
 #   - .github/workflows/playwright.yml (TEST_USERNAME / TEST_PASSWORD)
-#   - src/data/builders/userBuilder.ts (buildForUi's hardcoded employee name)
+#   - src/constants/common.ts (DEFAULT_EMPLOYEE_NAME)
 database:
     hostName: db
     hostPort: 3306

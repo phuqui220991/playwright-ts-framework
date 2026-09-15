@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker';
-import { APIUserData, UIUserFormData, UiRole } from '../../models/user';
-import { DEFAULT_PASSWORD } from '../../constants/common';
-import { Roles } from '../../constants/roles';
-import { Status } from '../../constants/status';
+import { APIUserData, UIUserFormData, UiRole } from '@models/user';
+import { DEFAULT_EMPLOYEE_NAME, DEFAULT_PASSWORD } from '@constants/common';
+import { Roles } from '@constants/roles';
+import { Status } from '@constants/status';
 
 type InternalRole = UiRole;
 
@@ -19,7 +19,9 @@ export class UserBuilder {
 
         this.username = `user_${uniqueSuffix}`;
         this.password = DEFAULT_PASSWORD;
-        this.name = faker.person.fullName();
+        // Defaults to the seeded employee so the UI's employee-name autocomplete resolves;
+        // override with withName() only when the test seeds its own employee.
+        this.name = DEFAULT_EMPLOYEE_NAME;
         this.role = 'Admin';
         this.enabled = true;
         // Must match the employee seeded by docker/installer/cli_install_config.yaml — the API rejects
@@ -78,7 +80,7 @@ export class UserBuilder {
             password: this.password,
             confirmPassword: this.password,
             role: this.role,
-            name: 'Qui  Ngo',
+            name: this.name,
             status: this.enabled ? 'Enabled' : 'Disabled',
         };
     }
