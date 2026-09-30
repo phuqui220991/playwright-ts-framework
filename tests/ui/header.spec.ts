@@ -1,7 +1,7 @@
 import { test } from '@fixtures/pom.fixture';
 import { env } from '@utils/env';
 
-test.describe('Header verification', () => {
+test.describe('Header', () => {
     test.beforeEach(async ({ dashboardPage }) => {
         await dashboardPage.open();
         await dashboardPage.expectLoaded();
@@ -26,7 +26,7 @@ test.describe('Header verification', () => {
     });
 });
 
-test.describe('Header verification - logout', () => {
+test.describe('Header - logged out', () => {
     test.use({ storageState: { cookies: [], origins: [] } });
 
     test('TC-Header-004: Logout successfully', async ({ loginPage, dashboardPage }) => {

@@ -1,5 +1,6 @@
 import { APIRequestContext, APIResponse, expect } from '@playwright/test';
 import { Logger } from '@utils/log/logger';
+import { env } from '@utils/env';
 
 type GetOptions = Parameters<APIRequestContext['get']>[1];
 type PostOptions = Parameters<APIRequestContext['post']>[1];
@@ -12,29 +13,37 @@ export class ApiClient {
     async get(path: string, options?: GetOptions): Promise<APIResponse> {
         Logger.info(`API GET: ${path}`);
         const response = await this.request.get(path, options);
-        Logger.info(`API GET ${path} -> ${response.status()}`);
+        await this.logResponse('GET', path, response);
         return response;
     }
 
     async post(path: string, options?: PostOptions): Promise<APIResponse> {
         Logger.info(`API POST: ${path}`);
         const response = await this.request.post(path, options);
-        Logger.info(`API POST ${path} -> ${response.status()}`);
+        await this.logResponse('POST', path, response);
         return response;
     }
 
     async put(path: string, options?: PutOptions): Promise<APIResponse> {
         Logger.info(`API PUT: ${path}`);
         const response = await this.request.put(path, options);
-        Logger.info(`API PUT ${path} -> ${response.status()}`);
+        await this.logResponse('PUT', path, response);
         return response;
     }
 
     async delete(path: string, options?: DeleteOptions): Promise<APIResponse> {
         Logger.info(`API DELETE: ${path}`);
         const response = await this.request.delete(path, options);
-        Logger.info(`API DELETE ${path} -> ${response.status()}`);
+        await this.logResponse('DELETE', path, response);
         return response;
+    }
+
+    private async logResponse(method: string, path: string, response: APIResponse): Promise<void> {
+        Logger.info(`API ${method} ${path} -> ${response.status()}`);
+        if (env.debug) {
+            const body = await response.text().catch(() => '');
+            Logger.debug(`API ${method} ${path} body: ${body.slice(0, 1000)}`);
+        }
     }
 
     async expectStatus(response: APIResponse, expectedStatus: number): Promise<void> {

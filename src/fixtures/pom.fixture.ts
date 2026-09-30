@@ -3,8 +3,8 @@ import { LoginPage } from '@pages/login.page';
 import { DashboardPage } from '@pages/dashboard.page';
 import { ChangePasswordPage } from '@pages/header/changePassword.page';
 import { SupportPage } from '@pages/header/support.page';
-import { UserManagementPage } from '@pages/admin/userManagement.page';
-import { SideNavComponent } from '@components/side-nav.component';
+import { AddSystemUserPage } from '@pages/admin/addSystemUser.page';
+import { SystemUsersPage } from '@pages/admin/systemUsers.page';
 
 type Pages = {
     loginPage: LoginPage;
@@ -13,10 +13,9 @@ type Pages = {
     supportPage: SupportPage;
 
     // Admin pages
-    userManagementPage: UserManagementPage;
-
-    // Add more pages here as needed
-    sideNavComponent: SideNavComponent;
+    addSystemUserPage: AddSystemUserPage;
+    systemUsersPage: SystemUsersPage;
+    // Add more admin pages here as needed
 };
 
 export const test = base.extend<Pages>({
@@ -36,12 +35,12 @@ export const test = base.extend<Pages>({
         await use(new SupportPage(page));
     },
 
-    userManagementPage: async ({ page }, use) => {
-        await use(new UserManagementPage(page));
+    addSystemUserPage: async ({ page }, use) => {
+        await use(new AddSystemUserPage(page));
     },
 
-    sideNavComponent: async ({ page }, use) => {
-        await use(new SideNavComponent(page));
+    systemUsersPage: async ({ page }, use) => {
+        await use(new SystemUsersPage(page));
     },
 });
 

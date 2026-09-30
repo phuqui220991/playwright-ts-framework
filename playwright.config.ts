@@ -66,7 +66,7 @@ export default defineConfig({
         {
             name: 'api',
             testDir: './tests/api',
-            use: { storageState: 'auth/storageState/auth.json' },
+            use: { baseURL: env.apiBaseUrl, storageState: 'auth/storageState/auth.json' },
             dependencies: ['setup'],
         },
 

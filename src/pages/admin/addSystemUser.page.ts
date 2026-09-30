@@ -3,18 +3,20 @@ import { UIUserFormData } from '@models/user';
 import { BasePage } from '@pages/base.page';
 import { Routes } from '@constants/routes';
 
-export class UserManagementPage extends BasePage {
-    readonly usernameInput: Locator;
-    readonly passwordInput: Locator;
-    readonly confirmPasswordInput: Locator;
-    readonly employeeNameInput: Locator;
-    readonly roleDropdown: Locator;
-    readonly statusDropdown: Locator;
-    readonly saveButton: Locator;
-    readonly successMessage: Locator;
+export class AddSystemUserPage extends BasePage {
+    private readonly heading: Locator;
+    private readonly usernameInput: Locator;
+    private readonly passwordInput: Locator;
+    private readonly confirmPasswordInput: Locator;
+    private readonly employeeNameInput: Locator;
+    private readonly roleDropdown: Locator;
+    private readonly statusDropdown: Locator;
+    private readonly saveButton: Locator;
+    private readonly successMessage: Locator;
 
     constructor(page: Page) {
         super(page);
+        this.heading = page.getByRole('heading', { name: 'Add User' });
         this.usernameInput = page
             .locator('div.oxd-input-group', { hasText: 'Username' })
             .locator('input');
@@ -36,22 +38,22 @@ export class UserManagementPage extends BasePage {
         this.successMessage = page.locator('.oxd-toast-content');
     }
 
-    async open(action: 'add' | 'view'): Promise<void> {
-        if (action === 'add') {
-            await this.goto(Routes.addSystemUser);
-        } else {
-            await this.goto(Routes.viewSystemUsers);
-        }
+    async open(): Promise<void> {
+        await this.goto(Routes.addSystemUser);
     }
 
-    async selectDropdownOption(dropdown: Locator, optionLabel: string): Promise<void> {
+    private option(label: string): Locator {
+        return this.page.getByRole('option', { name: label, exact: true });
+    }
+
+    private async selectDropdownOption(dropdown: Locator, optionLabel: string): Promise<void> {
         await dropdown.click();
-        await this.page.getByRole('option', { name: optionLabel, exact: true }).click();
+        await this.option(optionLabel).click();
     }
 
     async selectEmployee(name: string): Promise<void> {
         await this.employeeNameInput.fill(name);
-        await this.page.getByRole('option', { name, exact: true }).click();
+        await this.option(name).click();
     }
 
     async createUser(user: UIUserFormData): Promise<void> {
@@ -64,24 +66,12 @@ export class UserManagementPage extends BasePage {
         await this.saveButton.click();
     }
 
+    async expectLoaded(): Promise<void> {
+        await this.expectRoute(Routes.addSystemUser);
+        await expect(this.heading).toBeVisible();
+    }
+
     async expectSuccessMessage(): Promise<void> {
         await expect(this.successMessage).toBeVisible();
-    }
-
-    async searchByUsername(username: string): Promise<void> {
-        await this.page.goto(Routes.viewSystemUsers);
-        await this.page
-            .locator('div.oxd-input-group', { hasText: 'Username' })
-            .locator('input')
-            .fill(username);
-        await this.page.getByRole('button', { name: 'Search' }).click();
-    }
-
-    userRow(username: string): Locator {
-        return this.page.getByRole('row').filter({ hasText: username });
-    }
-
-    async expectUserVisible(username: string): Promise<void> {
-        await expect(this.userRow(username)).toBeVisible();
     }
 }

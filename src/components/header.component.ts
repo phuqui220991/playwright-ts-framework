@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from '@playwright/test';
 
 export class HeaderComponent {
-    private readonly headerUsermenu: Locator;
+    private readonly userMenu: Locator;
     private readonly aboutLink: Locator;
     private readonly supportLink: Locator;
     private readonly changePasswordLink: Locator;
@@ -10,7 +10,7 @@ export class HeaderComponent {
     private readonly aboutModalCloseButton: Locator;
 
     constructor(private readonly page: Page) {
-        this.headerUsermenu = page.locator('.oxd-userdropdown-tab');
+        this.userMenu = page.locator('.oxd-userdropdown-tab');
         this.aboutLink = page.getByRole('menuitem', { name: 'About' });
         this.supportLink = page.getByRole('menuitem', { name: 'Support' });
         this.changePasswordLink = page.getByRole('menuitem', { name: 'Change Password' });
@@ -20,7 +20,7 @@ export class HeaderComponent {
     }
 
     async openAbout(): Promise<void> {
-        await this.headerUsermenu.click();
+        await this.userMenu.click();
         await this.aboutLink.click();
     }
 
@@ -34,17 +34,17 @@ export class HeaderComponent {
     }
 
     async goToSupport(): Promise<void> {
-        await this.headerUsermenu.click();
+        await this.userMenu.click();
         await this.supportLink.click();
     }
 
     async goToChangePassword(): Promise<void> {
-        await this.headerUsermenu.click();
+        await this.userMenu.click();
         await this.changePasswordLink.click();
     }
 
     async logout(): Promise<void> {
-        await this.headerUsermenu.click();
+        await this.userMenu.click();
         await this.logoutLink.click();
     }
 }

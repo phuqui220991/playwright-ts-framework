@@ -1,7 +1,7 @@
 import { test } from '@fixtures/pom.fixture';
 import { env } from '@utils/env';
 
-test.describe('Authentication', () => {
+test.describe('Login', () => {
     test.use({ storageState: { cookies: [], origins: [] } });
 
     test('TC-Login-001: Login successfully with valid credentials', async ({

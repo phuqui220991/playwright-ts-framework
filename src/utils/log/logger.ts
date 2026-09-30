@@ -42,6 +42,7 @@ export class Logger {
                 console.warn(message);
                 break;
             default:
+                // eslint-disable-next-line no-console -- Logger is the one sanctioned console writer
                 console.log(message);
         }
     }

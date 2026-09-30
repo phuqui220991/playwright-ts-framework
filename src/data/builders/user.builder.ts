@@ -1,16 +1,14 @@
 import { faker } from '@faker-js/faker';
-import { APIUserData, UIUserFormData, UiRole } from '@models/user';
+import { APIUserData, UIUserFormData, UiRole, UiStatus } from '@models/user';
 import { DEFAULT_EMPLOYEE_NAME, DEFAULT_PASSWORD } from '@constants/common';
 import { Roles } from '@constants/roles';
 import { Status } from '@constants/status';
-
-type InternalRole = UiRole;
 
 export class UserBuilder {
     private username: string;
     private password: string;
     private name: string;
-    private role: InternalRole;
+    private role: UiRole;
     private enabled: boolean;
     private empNumber: number;
 
@@ -95,16 +93,16 @@ export class UserBuilder {
         };
     }
 
-    private mapRoleToApiId(role: InternalRole): number {
+    private mapRoleToApiId(role: UiRole): number {
         const match = Object.values(Roles).find((r) => r.label === role);
         if (!match) {
             throw new Error(`Unknown role: ${role}`);
         }
 
-        return Number(match.code);
+        return match.code;
     }
 
-    private mapStatusToApiStatus(status: 'Enabled' | 'Disabled'): boolean {
+    private mapStatusToApiStatus(status: UiStatus): boolean {
         const match = Object.values(Status).find((s) => s.label === status);
         if (!match) {
             throw new Error(`Unknown status: ${status}`);

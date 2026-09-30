@@ -39,8 +39,9 @@ installer to:
 - create the app-level DB user `orangehrm` / `orangehrm`,
 - create one admin login: username **`orangehrm`**, password **`Admin@0123`**,
 - create one employee record: **Qui Ngo** (this is what
-  `userBuilder.ts`'s `buildForUi()` hardcodes as the employee to pick in the
-  "Add User" test — they must stay in sync).
+  `DEFAULT_EMPLOYEE_NAME` in `src/constants/common.ts` points at, and
+  `UserBuilder` uses it as the employee to pick in the "Add User" test —
+  they must stay in sync).
 
 The installer deletes this file itself after a successful run (it holds
 plaintext DB credentials), so it's safe to commit — it's just a template.
@@ -73,14 +74,15 @@ Added to the `test` job:
 ### 5. `src/utils/env/env.ts` (updated)
 
 Previously this **always** required a `.env.<ENV>` file on disk and threw if
-it was missing. That file (`.env.example` etc.) is gitignored, so it never
-existed on a fresh CI checkout — meaning CI failed before a single test ran.
+it was missing. CI runs with `ENV=ci`, and `.env.ci` never exists on a fresh
+checkout (`.env*` is gitignored; only `.env.example` is committed) — meaning
+CI failed before a single test ran.
 
 Now: if the file exists, it's loaded as before (unchanged local behavior). If
 it's missing **and `CI` is set** (GitHub Actions sets this automatically), the
-loader just skips straight to `validateEnv()`, which reads `BASE_URL` /
-`TEST_USERNAME` / `TEST_PASSWORD` directly from `process.env` — i.e. from the
-workflow's `env:` block instead of a file.
+loader skips the file and goes straight to the zod schema validation, which
+reads `BASE_URL` / `TEST_USERNAME` / `TEST_PASSWORD` directly from
+`process.env` — i.e. from the workflow's `env:` block instead of a file.
 
 ## Running it locally
 
@@ -158,9 +160,12 @@ If you need a different port, update it in three places together:
 
 ### Changing the seeded employee name
 
-The "Add User" test (`userBuilder.ts`'s `buildForUi()`) hardcodes the
-employee it selects from the Employee Name autocomplete. If you ever change
-that name, update `cli_install_config.yaml`'s `admin.adminEmployeeFirstName`
-/ `adminEmployeeLastName` to match — the installer creates that employee from
+The "Add User" test selects the employee named by `DEFAULT_EMPLOYEE_NAME`
+(`src/constants/common.ts`) from the Employee Name autocomplete, and API-created
+users default to `empNumber: 1` (`UserBuilder`), which is that same employee.
+If you ever change the name, update `cli_install_config.yaml`'s
+`admin.adminEmployeeFirstName` / `adminEmployeeLastName` and
+`DEFAULT_EMPLOYEE_NAME` together — the installer creates that employee from
 the admin account's name field, since a fresh instance has no employees
-otherwise.
+otherwise. Note the constant has a double space (`'Qui  Ngo'`) because
+OrangeHRM renders a blank middle name that way.

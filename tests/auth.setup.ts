@@ -1,9 +1,9 @@
-import { expect, test as setup } from '@fixtures/pom.fixture';
+import { test as setup } from '@fixtures/pom.fixture';
 import { env } from '@utils/env';
 
-setup('authenticate', async ({ page, loginPage }) => {
+setup('authenticate', async ({ page, loginPage, dashboardPage }) => {
     await loginPage.open();
     await loginPage.login(env.username, env.password);
-    await expect(page).toHaveURL(/\/dashboard\/index/);
+    await dashboardPage.expectLoaded();
     await page.context().storageState({ path: 'auth/storageState/auth.json' });
 });

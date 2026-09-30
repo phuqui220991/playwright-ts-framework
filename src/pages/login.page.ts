@@ -1,5 +1,5 @@
 import { expect, Locator, Page } from '@playwright/test';
-import { BasePage } from './base.page';
+import { BasePage } from '@pages/base.page';
 import { Routes } from '@constants/routes';
 
 export class LoginPage extends BasePage {
@@ -32,7 +32,7 @@ export class LoginPage extends BasePage {
     }
 
     async expectLoaded(): Promise<void> {
-        await expect(this.page).toHaveURL(/\/auth\/login/);
+        await this.expectRoute(Routes.login);
         await expect(this.loginButton).toBeVisible();
     }
 }

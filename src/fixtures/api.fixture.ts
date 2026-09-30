@@ -1,4 +1,4 @@
-import { test as base, expect } from '@playwright/test';
+import { test as base } from '@playwright/test';
 import { ApiClient } from '@api/clients/api.client';
 import { UsersApi } from '@api/services/users.api';
 
@@ -19,4 +19,4 @@ export const test = base.extend<ApiFixtures>({
     },
 });
 
-export { expect };
+export { expect } from '@playwright/test';

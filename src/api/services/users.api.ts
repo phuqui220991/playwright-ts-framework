@@ -38,6 +38,14 @@ export class UsersApi {
         return body.data;
     }
 
+    /**
+     * Registers a user created outside this service (e.g. through the UI) for automatic cleanup.
+     * Call it before creating the user so it is removed even if the test fails midway.
+     */
+    trackForCleanup(username: string): void {
+        this.createdUsernames.add(username);
+    }
+
     async findByUsername(username: string): Promise<AdminUserRecord | undefined> {
         const response = await this.searchRaw(username);
         await this.client.expectOk(response);
