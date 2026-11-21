@@ -26,6 +26,8 @@ done
 echo "Running the OrangeHRM CLI installer..."
 docker compose cp docker/installer/cli_install_config.yaml orangehrm:/var/www/html/installer/cli_install_config.yaml
 docker compose exec -T orangehrm php /var/www/html/installer/cli_install.php
+docker compose exec -T db mysql -u root -proot orangehrm \
+  -e "UPDATE hs_hr_employee SET emp_firstname = 'orangeHRM', emp_middle_name = 'Admin', emp_lastname = '0001' WHERE emp_number = 1;"
 
 echo "Waiting for OrangeHRM to respond..."
 for i in $(seq 1 60); do
